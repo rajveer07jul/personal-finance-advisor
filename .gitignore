@@ -1,0 +1,34 @@
+# Java and Maven generated files
+**/target/
+**/build/
+
+# Local Spring Boot configuration containing passwords
+**/src/main/resources/application-local.properties
+
+# Python generated files
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.venv/
+**/venv/
+
+# Local environment files
+**/.env
+!**/.env.example
+
+# IDE files
+**/.vscode/
+**/.idea/
+**/*.iml
+**/.classpath
+**/.project
+**/.settings/
+
+# Logs
+**/*.log
+**/logs/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
