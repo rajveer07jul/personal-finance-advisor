@@ -2,10 +2,13 @@ package com.rajveer.finance.auth.service;
 
 import com.rajveer.finance.auth.dto.AuthenticationResponse;
 import com.rajveer.finance.auth.dto.LoginRequest;
+import com.rajveer.finance.auth.dto.RefreshTokenRequest;
 import com.rajveer.finance.auth.dto.RegisterRequest;
+import com.rajveer.finance.auth.dto.TokenResponse;
 import com.rajveer.finance.auth.mapper.RegistrationMapper;
 import com.rajveer.finance.exception.DuplicateResourceException;
 import com.rajveer.finance.exception.ResourceNotFoundException;
+import com.rajveer.finance.security.jwt.JwtProperties;
 import com.rajveer.finance.security.jwt.JwtService;
 import com.rajveer.finance.user.entity.User;
 import com.rajveer.finance.user.entity.UserProfile;
@@ -29,6 +32,8 @@ public class AuthenticationServiceImpl
     private final RegistrationMapper registrationMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final JwtProperties jwtProperties;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     @Transactional
@@ -94,6 +99,9 @@ public class AuthenticationServiceImpl
         String accessToken =
                 jwtService.generateAccessToken(user);
 
+        String refreshToken =
+                refreshTokenService.createRefreshToken(user);
+
         UserProfile profile = user.getProfile();
 
         return new AuthenticationResponse(
@@ -104,7 +112,39 @@ public class AuthenticationServiceImpl
                 user.getRole(),
                 user.getAccountStatus(),
                 accessToken,
-                null
+                refreshToken
+        );
+    }
+
+    @Override
+    @Transactional
+    public TokenResponse refresh(
+            RefreshTokenRequest request
+    ) {
+        User user = refreshTokenService.validateAndRotate(
+                request.refreshToken()
+        );
+
+        String newAccessToken =
+                jwtService.generateAccessToken(user);
+
+        String newRefreshToken =
+                refreshTokenService.createRefreshToken(user);
+
+        return TokenResponse.bearer(
+                newAccessToken,
+                newRefreshToken,
+                jwtProperties.accessTokenExpiration()
+        );
+    }
+
+    @Override
+    @Transactional
+    public void logout(
+            RefreshTokenRequest request
+    ) {
+        refreshTokenService.revokeRefreshToken(
+                request.refreshToken()
         );
     }
 

@@ -78,10 +78,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers(
-                                        "/api/auth/register",
-                                        "/api/auth/login",
-                                        "/error"
-                                )
+        "/api/auth/register",
+        "/api/auth/login",
+        "/api/auth/refresh",
+        "/api/auth/logout",
+        "/error"
+)
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
