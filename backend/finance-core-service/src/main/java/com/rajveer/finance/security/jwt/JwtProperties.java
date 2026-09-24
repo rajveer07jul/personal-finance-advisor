@@ -1,5 +1,12 @@
 package com.rajveer.finance.security.jwt;
 
-public class JwtProperties {
-    
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "security.jwt")
+public record JwtProperties(
+        String secret,
+        String issuer,
+        long accessTokenExpiration,
+        long refreshTokenExpiration
+) {
 }

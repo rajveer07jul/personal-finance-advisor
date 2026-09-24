@@ -1,6 +1,7 @@
 package com.rajveer.finance.auth.controller;
 
 import com.rajveer.finance.auth.dto.AuthenticationResponse;
+import com.rajveer.finance.auth.dto.LoginRequest;
 import com.rajveer.finance.auth.dto.RegisterRequest;
 import com.rajveer.finance.auth.service.AuthenticationService;
 import com.rajveer.finance.common.response.ApiResponse;
@@ -32,5 +33,20 @@ public class AuthenticationController {
                                 response
                         )
                 );
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<AuthenticationResponse>> login(
+            @Valid @RequestBody LoginRequest request
+    ) {
+        AuthenticationResponse response =
+                authenticationService.login(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        "Login successful",
+                        response
+                )
+        );
     }
 }
