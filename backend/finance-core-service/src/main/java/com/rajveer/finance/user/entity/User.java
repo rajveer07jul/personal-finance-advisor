@@ -1,9 +1,11 @@
 package com.rajveer.finance.user.entity;
-
+import com.rajveer.finance.expense.entity.Expense;
 import com.rajveer.finance.common.entity.AuditableEntity;
 import com.rajveer.finance.common.enums.AccountStatus;
 import com.rajveer.finance.common.enums.Role;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -89,12 +91,31 @@ public class User extends AuditableEntity {
     )
     private UserProfile profile;
 
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<Expense> expenses = new ArrayList<>();
+
     public void attachProfile(UserProfile profile) {
         this.profile = profile;
 
         if (profile != null) {
             profile.setUser(this);
+            
         }
+    }
+
+    public void addExpense(Expense expense) {
+        expenses.add(expense);
+        expense.setUser(this);
+    }
+
+    public void removeExpense(Expense expense) {
+        expenses.remove(expense);
+        expense.setUser(null);
     }
 
     public boolean isActive() {
