@@ -1,5 +1,5 @@
 package com.rajveer.finance.common.enums;
 
-public class BudgetPeriod {
-    
+public enum BudgetPeriod {
+    MONTHLY
 }

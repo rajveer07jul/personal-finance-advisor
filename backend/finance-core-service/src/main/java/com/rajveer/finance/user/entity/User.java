@@ -1,4 +1,5 @@
 package com.rajveer.finance.user.entity;
+import com.rajveer.finance.budget.entity.Budget;
 import com.rajveer.finance.expense.entity.Expense;
 import com.rajveer.finance.common.entity.AuditableEntity;
 import com.rajveer.finance.common.enums.AccountStatus;
@@ -99,6 +100,14 @@ public class User extends AuditableEntity {
     @Builder.Default
     private List<Expense> expenses = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<Budget> budgets = new ArrayList<>();
+
     public void attachProfile(UserProfile profile) {
         this.profile = profile;
 
@@ -117,6 +126,16 @@ public class User extends AuditableEntity {
         expenses.remove(expense);
         expense.setUser(null);
     }
+
+        public void addBudget(Budget budget) {
+                budgets.add(budget);
+                budget.setUser(this);
+        }
+
+        public void removeBudget(Budget budget) {
+                budgets.remove(budget);
+                budget.setUser(null);
+        }
 
     public boolean isActive() {
         return accountStatus == AccountStatus.ACTIVE;
