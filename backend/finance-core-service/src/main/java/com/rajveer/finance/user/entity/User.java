@@ -4,6 +4,7 @@ import com.rajveer.finance.expense.entity.Expense;
 import com.rajveer.finance.common.entity.AuditableEntity;
 import com.rajveer.finance.common.enums.AccountStatus;
 import com.rajveer.finance.common.enums.Role;
+import com.rajveer.finance.goal.entity.FinancialGoal;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +109,14 @@ public class User extends AuditableEntity {
     @Builder.Default
     private List<Budget> budgets = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<FinancialGoal> goals = new ArrayList<>();
+
     public void attachProfile(UserProfile profile) {
         this.profile = profile;
 
@@ -136,6 +145,16 @@ public class User extends AuditableEntity {
                 budgets.remove(budget);
                 budget.setUser(null);
         }
+
+    public void addGoal(FinancialGoal goal) {
+        goals.add(goal);
+        goal.setUser(this);
+    }
+
+    public void removeGoal(FinancialGoal goal) {
+        goals.remove(goal);
+        goal.setUser(null);
+    }
 
     public boolean isActive() {
         return accountStatus == AccountStatus.ACTIVE;
