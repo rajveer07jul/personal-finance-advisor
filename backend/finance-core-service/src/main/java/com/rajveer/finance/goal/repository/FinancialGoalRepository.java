@@ -17,30 +17,40 @@ public interface FinancialGoalRepository
             Long userId
     );
 
-    List<FinancialGoal> findAllByUserIdOrderByPriorityDescTargetDateAsc(
+    List<FinancialGoal>
+    findAllByUserIdOrderByPriorityDescTargetDateAsc(
             Long userId
     );
 
-    List<FinancialGoal> findAllByUserIdAndStatusOrderByTargetDateAsc(
+    List<FinancialGoal>
+    findAllByUserIdAndStatusOrderByTargetDateAsc(
             Long userId,
             GoalStatus status
     );
 
-    List<FinancialGoal> findAllByUserIdAndGoalTypeOrderByTargetDateAsc(
+    List<FinancialGoal>
+    findAllByUserIdAndGoalTypeOrderByTargetDateAsc(
             Long userId,
             GoalType goalType
     );
 
-    List<FinancialGoal> findAllByUserIdAndTargetDateBeforeAndStatusNot(
+    List<FinancialGoal>
+    findAllByUserIdAndTargetDateBeforeAndStatusNot(
             Long userId,
             LocalDate targetDate,
             GoalStatus excludedStatus
     );
 
-    long countByUserId(Long userId);
+    long countByUserId(
+            Long userId
+    );
 
     long countByUserIdAndStatus(
             Long userId,
+            GoalStatus status
+    );
+
+    long countByStatus(
             GoalStatus status
     );
 }
